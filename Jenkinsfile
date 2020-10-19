@@ -1,17 +1,7 @@
 node {
     stage "Create build output"
+    docker run kharchenkov/mysql -e MYSQL_ROOT_PASSWORD=pass --volume db:/var/lib/mysql
+    docker run kharchenkov/php -p 80:80 -v ./html:/var/www/html
+    db:
     
-    // Make the output directory.
-    sh "mkdir -p output"
-
-    // Write an useful file, which is needed to be archived.
-    writeFile file: "output/usefulfile.txt", text: "This file is useful, need to archive it."
-
-    // Write an useless file, which is not needed to be archived.
-    writeFile file: "output/uselessfile.md", text: "This file is useless, no need to archive it."
-
-    stage "Archive build output"
-    
-    // Archive the build output artifacts.
-    archiveArtifacts artifacts: 'output/*.txt', excludes: 'output/*.md'
 }
